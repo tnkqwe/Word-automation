@@ -427,6 +427,7 @@ public:
 int main()
 {
 	/*
+	Automation automation(false);//0
 	automation.createPosition(false);//1
 	automation.createPosition(true);//2
 	automation.createPosition(false);//3
