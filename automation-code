@@ -323,9 +323,8 @@ public:
 //==========================================================================================================================
 		else if (connectionType == '.')
 		{
-			//concatenation is still in development
-		else
 			cout << "No such operation!\n";
+		}
 	}
 	Automation(Automation* original, char copyType)
 	{
