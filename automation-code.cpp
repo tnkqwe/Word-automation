@@ -161,30 +161,30 @@ private:
 		if (crrLength == 0 && position->isFinal())
 			return true;//all symbols are deleted and we are on a final position
 		else
-		for (int i = 0; i < position->transitions(); i++)
-		{
+			for (int i = 0; i < position->transitions(); i++)
+			{
 			crrPath->push_back(position->transition(i));//memorizing the path so far, for protection from a full empty cycle
 			if (hasEpsilonCycled(crrPath) == false)//lets check if we have done one
-			if (word[0] == position->transition(i)->symbol() ||
-				position->transition(i)->symbol() == '0')//if there is an empty transition
-				//there could be two transitions with the same symbol, leading to different positions
-			if (_recognize(word + position->transition(i)->length(),//instead of "position->transition[i].length()" you can put the number one (1), but this way the empty transition will be treated as an usual transition
-				strlen(word + position->transition(i)->length()),
-				position->transition(i)->target(),
-				crrPath))//remove the first symbol and then continue regocniizng further
-				return true;//the program is here, is has chosen the right transition and havs recognized the word
+				if (word[0] == position->transition(i)->symbol() ||
+					position->transition(i)->symbol() == '0')//if there is an empty transition
+					//there could be two transitions with the same symbol, leading to different positions
+					if (_recognize(word + position->transition(i)->length(),//instead of "position->transition[i].length()" you can put the number one (1), but this way the empty transition will be treated as an usual transition
+						strlen(word + position->transition(i)->length()),
+						position->transition(i)->target(),
+						crrPath))//remove the first symbol and then continue regocniizng further
+						return true;//the program is here, is has chosen the right transition and havs recognized the word
 			crrPath->pop_back();//the work after choosing the last transition is done
 			/*
 			return recognize(word + 1, strlen(word + 1), position->transition[i].target());
 			//works only if the automation is determined
 			*/
-		}
+			}
 		/*//for debugging
 		//if the program has not yet passed "return true;" means that the word is not recognised due to the following reasons:
 		if (crrLength != 0)
-			cout << "No transtion for the current symbol from the current position." << endl;
+		cout << "No transtion for the current symbol from the current position." << endl;
 		if (crrLength == 0)
-			cout << "Reached end of word at a non-final postition." << endl;
+		cout << "Reached end of word at a non-final postition." << endl;
 		*/
 		return false; //either the word is not recognized, or the program has taken a wrong turn (if it is undetermined)
 	}
@@ -248,7 +248,7 @@ private:
 		//debugging
 		cout << "Current path: ";
 		for (int i = 0; i < (int)(path->size()); i++)
-			cout << (*path)[i] << " ";
+		cout << (*path)[i] << " ";
 		cout << endl;
 		*/
 		for (int i = 0; i < (int)(path->size()) - 1; i++)
@@ -260,14 +260,14 @@ private:
 			}
 		}//no cycle so far, but it is not know if there are such somewhere else
 		if (has == false)
-		for (int i = 0; i < position->transitions(); i++)
-		{
+			for (int i = 0; i < position->transitions(); i++)
+			{
 			if (_hasCycle(path, position->transition(i)->target()))
 			{
 				has = true;
 				break;
 			}
-		}
+			}
 		path->pop_back();
 		return has;
 	}
@@ -302,25 +302,25 @@ public:
 			{
 				for (int t = 0; t < a->position(i)->transitions(); t++)
 					setTransition(a->position(i)->index() + 1,//+1 there is a new starting position, so all the positions of the first automation are going to have indexes that are larger with one (1)
-								  a->position(i)->transition(t)->target()->index() + 1,
-								  a->position(i)->transition(t)->symbol());
+					a->position(i)->transition(t)->target()->index() + 1,
+					a->position(i)->transition(t)->symbol());
 			}
 			for (int i = 0; i < b->positions(); i++)
 			{
 				for (int t = 0; t < b->position(i)->transitions(); t++)
 					setTransition(b->position(i)->index() + a->positions() + 1,//the number of the positions of the first automation plus the new starting position
-								  b->position(i)->transition(t)->target()->index() + a->positions() + 1,
-								  b->position(i)->transition(t)->symbol());
+					b->position(i)->transition(t)->target()->index() + a->positions() + 1,
+					b->position(i)->transition(t)->symbol());
 			}
 			//copying the transitions of the starting positions onto the new starting position
 			for (int i = 0; i < a->position(0)->transitions(); i++)
 				setTransition(0, a->position(0)->transition(i)->target()->index() + 1,
-								 a->position(0)->transition(i)->symbol());
+				a->position(0)->transition(i)->symbol());
 			for (int i = 0; i < b->position(0)->transitions(); i++)
 				setTransition(0, b->position(0)->transition(i)->target()->index() + a->positions() + 1,
-								 b->position(0)->transition(i)->symbol());
+				b->position(0)->transition(i)->symbol());
 		}
-//==========================================================================================================================
+		//==========================================================================================================================
 		else if (connectionType == '.')
 		{
 			cout << "No such operation!\n";
@@ -423,11 +423,9 @@ public:
 		return _position.size();
 	}
 };
-
 int main()
 {
-	/*
-	Automation automation(false);//0
+	Automation automation(true);
 	automation.createPosition(false);//1
 	automation.createPosition(true);//2
 	automation.createPosition(false);//3
@@ -442,7 +440,8 @@ int main()
 	//testing the full empty cycle protection
 	//automation.setTransition(1, 2, '0');
 	//automation.setTransition(2, 1, '0');
-	*/
+	
+	/*
 	Automation a(false);//0
 	a.createPosition(false);//1
 	a.createPosition(false);//2
@@ -469,6 +468,7 @@ int main()
 	b.setTransition(4, 5, 'b');
 	b.setTransition(5, 1, 'a');
 	Automation automation(&a, &b, 'u');
+	*/
 	/*
 	Automation automation(false);//0
 	automation.createPosition(false);//1
@@ -533,23 +533,3 @@ int main()
 	system("pause");
 	return 0;
 }
-
-/*
-stuff to do:
-  -joining automations
-    -concatenation
-  -transforming automations
-    -simple copying
-    -determinizing
-    -L* (I really don't know how is it called)
-    -L+ (I really don't know how is it called)
-  -storing automations
-  -creating an user interface
-done stuff (or stuff you can do with it):
-  -main algorithm
-  -reconizing words
-  -generating words
-  -handling of undetermined automations
-  -joining automations
-    -automation union
-*/
